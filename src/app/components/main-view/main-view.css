@@ -1,4 +1,25 @@
 .mainView {
     background-color: var(--background-default);
     color: var(--foreground-default);
+    margin: .5rem;
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+    justify-content: stretch;
+    grid-template-areas:
+        "basicInfo basicInfo"
+        "options results"
+        ;
+}
+
+.basicInfo {
+    grid-area: basicInfo;
+}
+.options {
+    grid-area: options;
+}
+.results {
+    grid-area: results;
 }
