@@ -1,0 +1,4 @@
+.mainView {
+    background-color: var(--background-default);
+    color: var(--foreground-default);
+}

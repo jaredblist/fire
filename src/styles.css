@@ -1,1 +1,414 @@
 /* You can add global styles to this file, and also import other style files */
+/*@import "../node_modules/ol/ol.css";
+@import "../node_modules/ol-ext/dist/ol-ext.css";*/
+
+
+body {
+    margin: 0;
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+    /* iOS/Android WebKit */
+    tap-highlight-color: transparent;
+    /* fallback */
+
+    /*touch-action: none;*/
+    /* Disable touch actions that might interfere */
+    /*-ms-touch-action: none;*/
+    /* For older versions of IE */
+}
+
+:root {
+    /* Colors */
+    /** Green Version **/
+    --foreground-default: #fff; /*#E9EDF6;*/
+    --foreground-tertiary: #fff;
+    --foreground-button: #fde4f1cc;/*#fde4f1cc;*/
+
+    --background-default: #333;
+    --background-secondary: #90d6d9;
+    --background-tertiary: #25696c;
+    --background-row: #bce8e6;
+    --background-row-alternate: #e2f4f5;
+    --background-accent: #e8bebc;
+    --background-disabled: #888;
+
+    /*--background-default: #304f43;
+    --background-secondary: #38ab88;
+    --background-secondary-gradient-end: #27785f;
+    --background-modal: #2A3D35;
+    --background-modal-card: #cde099aa;
+    --background-border: #121f1a;
+    --resonance-background: #1a242b;
+
+    */  
+
+    --background-button-color-gradient-start: #e60073;
+    --background-button-color-gradient-end: #99004d;
+    --button-box-shadow-color: #1d0014;
+
+    /* For the battle action colors */
+    --active-option-background: #495775;
+    --active-option-foreground: #fde4f1;
+    --active-option-selected-shadow-color: #d1e1ff;
+    --disabled-active-option-foreground-color: #B6A1A9;
+    --disabled-active-option-background-color: #383d46;
+
+    /*For the menu background design*/
+    --line: rgba(255, 255, 255, .06);    
+    --thick: 3px;    
+    --pair-gap: 3px;    
+    --group-gap: 24px;    
+
+    /** Blue Version **/
+    /*--foreground-default: #E9EDF6;
+
+    --foreground-secondary: #afb685;
+    --foreground-menu-selected: #fff;
+    --foreground-tertiary: #49647A;
+    --foreground-button: #E5E5E5;
+    --disabled-foreground-quaternary: #E5E5E584;
+    --foreground-accent: #9E8F81;
+    --foreground-light: #FFFFFF;    
+    --foreground-tooltip: #91afc7;
+
+    --background-default: #495775;
+    --background-secondary: #2f7eac;
+    --background-secondary-gradient-end: #6bafd6;    
+    --background-accent: #BEC6CC;
+
+    --background-button-color-gradient-start: #e60073;
+    --background-button-color-gradient-end: #99004d;*/
+
+    --background-header: #08090A;
+    --background-quarternary: #E5E5E5;
+    --menu-button-hover: #3f5f5f;
+
+    --foreground-button-color: #A3B9CC;
+
+    --disabled-button-foreground-color: #460b29cc;
+    --disabled-button-background-color: #99004dcc;
+
+    --background-light: #54595E;
+    --transaction-color: #18612e;
+    --recipe-button-background-color: #202020;
+    --disabled-recipe-button-background-color: #20202084;
+    --button-color: #F0F0F0;
+    --button-selected: #1e2023;
+    --section-header: #08090A;
+    --primary-default: #5dfdcb;
+    --primary-light: #b2ffe7;
+
+    --ravager-color: #3c74c3;
+    --vanguard-color: #df3520;
+    --specialist-color: #50BC67;
+
+    --stagger-color: #22d1dd;
+    --staggered-color: #fff;
+
+    --resource-border: #24b286;
+
+
+    --tile-size: 9.5vh;
+    /* Is this really the best way to handle it? */
+    --back-button-width: 8.8%;
+
+    --pulse-dur: 1.6s;
+    /* will be updated by JS */
+    --res-size: 120px;
+    /* tweak for your art */
+
+    /* Shadows */
+    --background-header-shadow: 0 1px 3px 0 rgba(92, 125, 153, 0.5);
+
+    /* Fonts */
+    --minimum-button-font-size: 1.2rem;
+    --preferred-button-font-size: 1.5rem;
+    --maximum-button-font-size: 2rem;
+
+    --h1-size: 20vh;
+    --h1-weight: 400;
+    --h1-spacing: -1.5px;
+
+    --h2-size: 3.75rem;
+    --h2-weight: 400;
+    --h2-spacing: -0.5px;
+
+    --h3-size: 3rem;
+    --h3-weight: 400;
+    --h3-spacing: -0px;
+
+    --h4-size: 2.125rem;
+    --h4-weight: 400;
+    --h4-spacing: -0.25px;
+
+    --h5-size: 1.5rem;
+    --h5-weight: 400;
+    --h5-spacing: -0px;
+
+    --h6-size: 1.25rem;
+    --h6-weight: 700;
+    --h6-spacing: -0.15px;
+
+    --b1-size: 1rem;
+    --b1-weight: 400;
+    --b1-spacing: 0.5px;
+
+    --b2-size: 0.875rem;
+    --b2-weight: 400;
+    --b2-spacing: 0.25px;
+
+    --button-size: 0.875rem;
+    --button-weight: 700;
+    --button-spacing: 1.25px;
+
+    --caption-size: 0.75rem;
+    --caption-weight: 400;
+    --caption-spacing: 0.4px;
+
+    --overline-size: 0.625rem;
+    --overline-weight: 400;
+    --overline-spacing: 1.5px;
+
+    --animal-list-max-columns: 4;
+
+    --c1-size: 1.25rem;
+    --c1-weight: 400;
+    --c1-spacing: 0.15px;
+
+    --c2-size: 0.875rem;
+    --c2-weight: 700;
+    --c2-spacing: 0.1px;
+
+    --e2-size: 1.175rem;
+    --e3-size: 1.025rem;
+    --e4-size: 0.75rem;
+
+    --s1-size: 3.2rem;
+    --s1-weight: 600;
+    --s1-spacing: 0.15px;
+
+    --s2-size: 1.675rem;
+    --s2-weight: 600;
+    --s2-spacing: 0.15px;
+
+    --s3-size: 1.4rem;
+    --s3-weight: 600;
+    --s3-spacing: 0.15px;
+
+    --s4-size: 1.15rem;
+    --s4-weight: 600;
+    --s4-spacing: 0.15px;
+
+    --t-size: 1.15rem;
+    --t-weight: 600;
+    --t-spacing: 0.15px;
+
+    --s5-size: 1.1rem;
+    --s5-weight: 400;
+    --s5-spacing: 0.1px;
+
+    --s6-size: 1.15rem;
+    --s6-weight: 600;
+    --s6-spacing: 0.15px;
+
+    --s7-size: .9rem;
+    --s7-weight: 600;
+    --s7-spacing: 0.15px;
+
+    --keyword-size: 1.1rem;
+
+    /* Menu Buttons */
+    --m1-size: 1.25rem;
+    --m1-size-mobile: 1.2rem;
+    --m1-weight: 550;
+    --m1-spacing: 0.1px;
+
+    --m2-size: 1.1rem;
+    --m2-weight: 400;
+    --m2-spacing: 0.1px;
+
+    /* Zone Navigation */
+    --z1-size: 1.1rem;
+    --mz1-size: 1.4rem;
+    --z1-weight: 400;
+    --z1-spacing: 0.1px;
+
+    --z2-size: 1.05rem;
+    --mz2-size: 1.2rem;
+    --z2-weight: 400;
+    --z2-spacing: 0.1px;
+
+    --z3-size: .935rem;
+    --mz3-size: 1.1rem;
+    --z3-weight: 400;
+    --z3-spacing: 0.1px;
+}
+
+/*@font-face {
+    font-family: 'BrunoAceSC';
+    src: url('../public/fonts/BrunoAceSC-Regular.woff2') format('woff2'),
+        url('../public/fonts/BrunoAceSC-Regular.woff') format('woff'),
+        url('../public/fonts/BrunoAceSC-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Tektur Regular';
+    src: url('../public/fonts/Tektur-Regular.woff2') format('woff2'),
+        url('../public/fonts/Tektur-Regular.woff') format('woff'),
+        url('../public/fonts/Tektur-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Tektur Bold';
+    src: url('../public/fonts/Tektur-Bold.woff2') format('woff2'),
+        url('../public/fonts/Tektur-Bold.woff') format('woff'),
+        url('../public/fonts/Tektur-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Tektur Extra Bold';
+    src: url('../public/fonts/Tektur-ExtraBold.woff2') format('woff2'),
+        url('../public/fonts/Tektur-ExtraBold.woff') format('woff'),
+        url('../public/fonts/Tektur-ExtraBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}*/
+
+html,
+body {    
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px; /*3.2vmin*/
+    cursor: default;
+    color: var(--foreground-default);
+    background-color: var(--background-default);
+}
+
+.s1Heading {
+    font-size: var(--s1-size);
+    font-weight: var(--s1-weight);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    font-family: "Arial", sans-serif;    
+}
+
+.s2Heading {
+    font-size: var(--s2-size);
+    font-weight: var(--s2-weight);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    font-family: "Arial", sans-serif;    
+}
+
+.s3Heading {
+    font-size: var(--s3-size);
+    font-weight: var(--s3-weight);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    font-family: "Arial", sans-serif;
+}
+
+.s4Heading {
+    font-size: var(--s4-size);
+    font-weight: var(--s4-weight);
+}
+
+.m4Heading {
+    font-size: var(--s4-size);
+    font-weight: var(--s4-weight);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    font-family: "Arial", sans-serif;    
+}
+
+.tHeading {
+    font-size: var(--t-size);
+    font-weight: var(--t-weight);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    font-family: "Arial", sans-serif;    
+}
+
+.tooltipText {
+    text-shadow: 1px 1px 0px black, 0px 0px 2px black;
+}
+
+.pageHeader {
+    font-size: 3rem;
+    margin: .5rem;
+    font-variant: small-caps;
+    text-transform: uppercase;
+}
+
+.buttonStyled {
+    /*background-color: var(--background-button-color);*/
+    background: radial-gradient(ellipse at center, var(--background-button-color-gradient-start), var(--background-button-color-gradient-end));
+    color: var(--foreground-button);
+    font-weight: bold;
+    font-size: var(--preferred-button-font-size);
+    border-style: solid;
+    font-variant: small-caps;
+    font-family: "Arial", sans-serif;
+    border-radius: 50px;
+    box-shadow: 1px 1px var(--button-box-shadow-color), 0 0 2px var(--button-box-shadow-color), 1px 1px 5px var(--button-box-shadow-color),
+        -1px -1px var(--button-box-shadow-color), 0 0 2px var(--button-box-shadow-color), -1px -1px 5px var(--button-box-shadow-color);
+    border: unset;
+    text-shadow: 0px 0px 10px #fde4f188, 0px 0px 15px #fde4f122;
+    line-height: 1.5rem;
+    padding: .6rem;
+    user-select: none;
+    touch-action: manipulation;
+    -webkit-user-drag: none;
+}
+
+.buttonStyled:hover {
+    background-color: var(--background-button-color-gradient-end);
+}
+
+.buttonStyled:active:enabled {
+    transform: scale(0.98);
+    -webkit-transform: scale(0.98);
+    /* Scaling button to 0.98 to its original size */
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    -webkit-box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    background: var(--background-button-color-gradient-start);
+    /* Lowering the shadow */
+}
+
+.buttonStyled:disabled {
+    color: var(--disabled-button-foreground-color);
+    background: var(--disabled-button-background-color);
+    box-shadow: unset;
+    text-shadow: unset;
+}
+
+.textCentered {
+    text-align: center;
+}
+
+.keyword {
+    font-size: var(--keyword-size);
+    font-style: normal;
+    font-weight: 1000;
+    text-shadow: 1px 1px 0px black, 0px 0px 2px black, 1px 1px 2px black;
+    text-transform: lowercase;
+    font-family: "BrunoAceSC", sans-serif;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.fullHeight {
+    height: 100%;
+}/* You can add global styles to this file, and also import other style files */
