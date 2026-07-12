@@ -4,7 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --base-href=/organizer/",
+    "watchBuild": "npm install && ng build --watch",
+    "deploy": "npm run config && ng build --base-href=/organizer/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
