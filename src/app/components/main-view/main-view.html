@@ -20,13 +20,13 @@
         <div class="option">
         <label>
             <input type="checkbox" [(ngModel)]="adjustSpendingFor1Kid" (change)="calculateTotalInvestmentsNeeded()">
-            Include increased spending for 1 kid ($250,000)
+            Include increased spending for +1 kid ($250,000)
         </label>
     </div>
     <div class="option">
         <label>
             <input type="checkbox" [(ngModel)]="adjustSpendingFor2Kids" (change)="calculateTotalInvestmentsNeeded()">
-            Include increased spending for 1 kid ($250,000)
+            Include increased spending for +1 kid ($250,000)
         </label>
     </div>
     <div class="option">
@@ -38,7 +38,7 @@
         <div class="option">
         <label>
             <input type="checkbox" [(ngModel)]="reduceSpending" (change)="calculateTotalInvestmentsNeeded()">
-            Reduce spending by 10% <i>(represents offset with credit card cash back and other small income streams)</i>
+            Reduce spending by 10% <i>(represents offset with credit card cash back and other small income throughout year)</i>
         </label>
         </div>
         <!--<div class="option">
@@ -98,15 +98,15 @@
             }
             @if (!removeMortgageEntirely) {
             <br/>
-            <span>Include {{this.adjustMortgagePayments() | currency}} lump sum for remaining mortgage payments</span>
+            <span>Include additional {{this.adjustMortgagePayments() | currency}} for remaining mortgage payments</span>
             }
             @if (adjustSpendingFor1Kid && adjustSpendingFor2Kids) {
             <br/>
-            <span>Include {{this.costPerKid * 2 | currency}} lump sum for 2 kids</span>
+            <span>Include additional {{this.costPerKid * 2 | currency}} for 2 kids</span>
             }
             @else if (adjustSpendingFor1Kid || adjustSpendingFor2Kids) {
                 <br/>
-            <span>Include {{this.costPerKid | currency}} lump sum for 1 kid</span>            
+            <span>Include additional {{this.costPerKid | currency}} for 1 kid</span>            
             }
         </div>
     </div>
