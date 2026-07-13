@@ -18,18 +18,28 @@ import { FormsModule } from '@angular/forms';
 //numbers but the mortgage doesn't change with inflation
 
 export class MainView {
-  currentInvestments = 615000;
+  currentInvestments = 630000;
   currentExpensesWithoutMortgage = 110000; //10000 for property taxes/insurance
   mortgageExpenses = 30000;
   currentExpenses = this.currentExpensesWithoutMortgage;// + this.mortgageExpenses; //doing sum for mortgage instead of monthly to better represent what it will cost
   yearlyContributions = 26000;
   monthlyContributions = this.yearlyContributions / 12;
   dailyContributions = this.yearlyContributions / 365;  
-  monthlyMortgagePayments = 2555.05;
-  yearlyMortgagePayments = this.monthlyMortgagePayments * 12;
+  
   totalInvestmentsNeeded = 0;
   dateToReachGoal = new Date('2028-01-15T18:30:00Z');
   costPerKid = 250000;
+  nominalInterestRate = .1;  
+  inflationRate = .03;
+  interestRate = this.nominalInterestRate - this.inflationRate; //inflation adjusted
+
+  monthlyMortgagePayments = 2555.05;
+  yearlyMortgagePayments = this.monthlyMortgagePayments * 12;
+  remainingMonthsOfMortgage = 300; //as of july 2026
+
+  monthlyChildcareCosts = 2000;
+  yearlyChildcareCosts = this.monthlyChildcareCosts * 12;
+  remainingMonthsOfChildcare = 216; //as of July 2026
 
   fullMortgagePaymentsLeft = 919818; //as of July 2026 roughly
 
@@ -58,7 +68,8 @@ export class MainView {
   }
 
   ngOnInit() {
-    
+    this.updateGlobalVariablesBasedOnDate();
+
     this.calculateTotalInvestmentsNeeded();
 
     this.updateCountdown();
@@ -68,8 +79,22 @@ export class MainView {
     });
   }
 
+  updateGlobalVariablesBasedOnDate() {
+    var numberOfMonthsSinceUpdate = this.getMonthsSinceJuly2026();
+
+    while (numberOfMonthsSinceUpdate > 0) {
+      this.currentInvestments *= 1 + this.nominalInterestRate / 12;
+      this.currentExpenses *= 1 + this.inflationRate / 12;
+      this.yearlyContributions *= 1 + this.inflationRate / 12;
+      this.monthlyContributions = this.yearlyContributions / 12;
+      this.dailyContributions = this.yearlyContributions / 365;  
+
+      numberOfMonthsSinceUpdate--;
+    }
+  }
+
   adjustMortgagePayments() {
-    var mortgagePaymentCost = 3330;    
+    var mortgagePaymentCost = this.monthlyMortgagePayments;    
     var remainingPayments = this.fullMortgagePaymentsLeft - (mortgagePaymentCost * this.getMonthsSinceJuly2026());
 
     return remainingPayments;
@@ -93,14 +118,87 @@ export class MainView {
     return months;
   }
 
+  //non lump sum version
+  //not exactly sure how to configure this because you need the money until you don't
+  calculateTotalInvestmentsNeededNonLumpSums() {
+    var mortgagePaymentsLeft = this.adjustMortgagePayments();    
+
+    var withdrawalRate = .04;
+    
+    var contributionInflationRate = .03;
+    const monthlyRate = this.interestRate / 12;
+    const dailyRate = this.interestRate / 365;
+    var balance = this.currentInvestments;
+    var days = 0;
+    var months = 0;
+
+    var expenses = this.currentExpenses;
+    var dailyContributions = this.dailyContributions;
+
+    if (this.includeCushion)
+      expenses += 10000;    
+
+    if (this.reduceSpending) {
+      expenses *= .9;
+    }
+    
+    if (this.increaseSpending) {
+      expenses *= 1.1;
+    }
+    
+    this.totalInvestmentsNeeded = expenses * (1 / withdrawalRate);
+
+
+    /*if (this.adjustSpendingFor1Kid && this.adjustSpendingFor2Kids) {
+      //2 kids
+      var lumpSumAddition = this.costPerKid * 2;
+      this.totalInvestmentsNeeded += lumpSumAddition;
+    }
+    else if (this.adjustSpendingFor1Kid || this.adjustSpendingFor2Kids) {
+      //1 kid
+      var lumpSumAddition = this.costPerKid;
+      this.totalInvestmentsNeeded += lumpSumAddition;
+    }
+    
+    if (!this.removeMortgageEntirely) {
+      this.totalInvestmentsNeeded += mortgagePaymentsLeft;
+    }*/
+
+    if (this.noContributions)
+      dailyContributions = 0;
+    
+    if (this.doubleContributions)
+      dailyContributions *= 2;
+
+    //var dailyMortgagePayments = this.removeMortgageEntirely ? 0 : this.yearlyMortgagePayments / 365;    
+
+    while (balance < this.totalInvestmentsNeeded) {
+      balance *= (1 + dailyRate);
+
+      dailyContributions += (dailyContributions * (contributionInflationRate / 365))
+
+      balance += dailyContributions;
+      //balance += dailyMortgagePayments;
+      days++;
+    }
+
+    const goalDate = new Date();
+    //goalDate.setMonth(goalDate.getMonth() + months);
+    goalDate.setDate(goalDate.getDate() + days);
+    goalDate.setSeconds(goalDate.getSeconds() - 1);
+
+    this.dateToReachGoal = goalDate;
+  }
+
+  //lump sum version
   calculateTotalInvestmentsNeeded() {
     var mortgagePaymentsLeft = this.adjustMortgagePayments();    
 
     var withdrawalRate = .04;
-    var interestRate = .07; //inflation adjusted
+    
     var contributionInflationRate = .03;
-    const monthlyRate = interestRate / 12;
-    const dailyRate = interestRate / 365;
+    const monthlyRate = this.interestRate / 12;
+    const dailyRate = this.interestRate / 365;
     var balance = this.currentInvestments;
     var days = 0;
     var months = 0;
