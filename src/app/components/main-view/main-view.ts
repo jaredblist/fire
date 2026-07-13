@@ -36,7 +36,7 @@ export class MainView {
   private sub?: Subscription;
 
   includeCushion = false;
-  adjustSpendingFor1Kid = false;
+  adjustSpendingFor1Kid = true;
   adjustSpendingFor2Kids = false;
   removeMortgageEntirely = false;
   reduceSpending = false;
