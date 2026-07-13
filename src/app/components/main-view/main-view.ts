@@ -1,20 +1,28 @@
-import { CurrencyPipe, NgClass } from '@angular/common';
+import { CurrencyPipe, NgClass, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { DataCard } from "../data-card/data-card";
 import { interval, Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-main-view',
-  imports: [CurrencyPipe, DataCard, NgClass],
+  imports: [CurrencyPipe, DataCard, FormsModule, NgIf],
   templateUrl: './main-view.html',
   styleUrl: './main-view.css',
 })
 export class MainView {
   currentInvestments = 615000;
-  currentExpenses = 100000;
-  monthlyContributions = 26000 / 12;
+  currentExpensesWithoutMortgage = 110000; //10000 for property taxes/insurance
+  mortgageExpenses = 30000;
+  currentExpenses = this.currentExpensesWithoutMortgage;// + this.mortgageExpenses; //doing sum for mortgage instead of monthly to better represent what it will cost
+  yearlyContributions = 26000;
+  monthlyContributions = this.yearlyContributions / 12;
+  dailyContributions = this.yearlyContributions / 365;
   totalInvestmentsNeeded = 0;
   dateToReachGoal = new Date('2028-01-15T18:30:00Z');
+  costPerKid = 250000;
+
+  fullMortgagePaymentsLeft = 919818; //as of July 2026 roughly
 
   countdown = {
     years: 0,
@@ -27,11 +35,21 @@ export class MainView {
 
   private sub?: Subscription;
 
+  includeCushion = false;
+  adjustSpendingFor1Kid = false;
+  adjustSpendingFor2Kids = false;
+  removeMortgageEntirely = false;
+  reduceSpending = false;
+  increaseSpending = false;
+  noContributions = false;
+  doubleContributions = false;
+
   constructor() {
 
   }
 
   ngOnInit() {
+    
     this.calculateTotalInvestmentsNeeded();
 
     this.updateCountdown();
@@ -41,24 +59,90 @@ export class MainView {
     });
   }
 
+  adjustMortgagePayments() {
+    var mortgagePaymentCost = 3330;    
+    var remainingPayments = this.fullMortgagePaymentsLeft - (mortgagePaymentCost * this.getMonthsSinceJuly2026());
+
+    return remainingPayments;
+  }
+
+  getMonthsSinceJuly2026(): number {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth(); // 0-indexed (0 = Jan, 11 = Dec)
+
+    const targetYear = 2026;
+    const targetMonth = 6; // 6 represents July
+
+    // Calculate total months difference
+    let months = (currentYear - targetYear) * 12 + (currentMonth - targetMonth);
+
+    // Optional: If you only want to count *fully completed* months,
+    // you can subtract 1 if today's day of the month is less than the target day.
+    // if (today.getDate() < 1) { months--; }
+
+    return months;
+  }
+
   calculateTotalInvestmentsNeeded() {
+    var mortgagePaymentsLeft = this.adjustMortgagePayments();    
+
     var withdrawalRate = .04;
     var interestRate = .07; //inflation adjusted
-    const monthlyRate = 0.07 / 12;
+    const monthlyRate = interestRate / 12;
+    const dailyRate = interestRate / 365;
     var balance = this.currentInvestments;
+    var days = 0;
     var months = 0;
 
-    //get amount for totalInvestmentsNeeded and dateToReachGoal date
-    this.totalInvestmentsNeeded = this.currentExpenses * (1 / withdrawalRate);
+    var expenses = this.currentExpenses;
+    var dailyContributions = this.dailyContributions;
+
+    if (this.includeCushion)
+      expenses += 10000;    
+
+    if (this.reduceSpending) {
+      expenses *= .9;
+    }
+    
+    if (this.increaseSpending) {
+      expenses *= 1.1;
+    }
+    
+    this.totalInvestmentsNeeded = expenses * (1 / withdrawalRate);
+
+
+    if (this.adjustSpendingFor1Kid && this.adjustSpendingFor2Kids) {
+      //2 kids
+      var lumpSumAddition = this.costPerKid * 2;
+      this.totalInvestmentsNeeded += lumpSumAddition;
+    }
+    else if (this.adjustSpendingFor1Kid || this.adjustSpendingFor2Kids) {
+      //1 kid
+      var lumpSumAddition = this.costPerKid;
+      this.totalInvestmentsNeeded += lumpSumAddition;
+    }
+    
+    if (!this.removeMortgageEntirely) {
+      this.totalInvestmentsNeeded += mortgagePaymentsLeft;
+    }
+
+    if (this.noContributions)
+      dailyContributions = 0;
+    
+    if (this.doubleContributions)
+      dailyContributions *= 2;
 
     while (balance < this.totalInvestmentsNeeded) {
-      balance *= (1 + monthlyRate);
-      balance += this.monthlyContributions;
-      months++;
+      balance *= (1 + dailyRate);
+      balance += dailyContributions;
+      days++;
     }
 
     const goalDate = new Date();
-    goalDate.setMonth(goalDate.getMonth() + months);
+    //goalDate.setMonth(goalDate.getMonth() + months);
+    goalDate.setDate(goalDate.getDate() + days);
+    goalDate.setSeconds(goalDate.getSeconds() - 1);
 
     this.dateToReachGoal = goalDate;
   }

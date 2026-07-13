@@ -1,20 +1,22 @@
 .mainView {
     background-color: var(--background-default);
     color: var(--foreground-default);
-    margin: .5rem;
+    margin: 0 .5rem;
     display: grid;
     height: 100%;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: 1fr 1.5fr 1fr;
     gap: 1rem;
     justify-content: stretch;
     grid-template-areas:
         "basicInfo basicInfo"
-        "options results"
+        "options options"
+        "results results"
         ;
 }
 
 .basicInfo {
+    margin-top: 1rem;
     grid-area: basicInfo;
 }
 .options {
@@ -22,4 +24,64 @@
 }
 .results {
     grid-area: results;
+    
+}
+
+.option {
+    margin: .35rem 0;
+}
+
+
+.result-panel {
+  padding: 12px;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* Dark background */
+  background: linear-gradient(
+    145deg,
+    #2b2b2b,
+    #171717
+  );
+
+  /* Green border */
+  border: 2px solid #52ff52;
+
+  /* Beveled effect */
+  box-shadow:
+    inset 2px 2px 4px rgba(255,255,255,.08),
+    inset -2px -2px 4px rgba(0,0,0,.8),
+    0 0 8px rgba(82,255,82,.5),
+    0 0 20px rgba(82,255,82,.25);
+
+  position: relative;
+}
+
+.result-panel::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(180,255,180,.4);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.result-label {
+  color: #8cff8c;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.result-value {
+  color: #baffba;
+  font-size: 1.925rem;
+  font-weight: bold;
+  text-shadow:
+    0 0 3px #7cff7c,
+    0 0 1px #52ff52;
 }
