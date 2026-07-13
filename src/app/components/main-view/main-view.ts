@@ -6,10 +6,17 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-main-view',
-  imports: [CurrencyPipe, DataCard, FormsModule, NgIf],
+  imports: [CurrencyPipe, DataCard, FormsModule],
   templateUrl: './main-view.html',
   styleUrl: './main-view.css',
 })
+
+//do some default auto updating of totals until you manually update
+//do some additional testing too. run the lump sum concepts by gpt. is it accurate to say 
+//110000 * 25 + (lump sums) is how much money I need to retire? 
+//something about the mortgage stuff isn't right because you are basically adding it all together and using inflation adjusted
+//numbers but the mortgage doesn't change with inflation
+
 export class MainView {
   currentInvestments = 615000;
   currentExpensesWithoutMortgage = 110000; //10000 for property taxes/insurance
@@ -17,7 +24,9 @@ export class MainView {
   currentExpenses = this.currentExpensesWithoutMortgage;// + this.mortgageExpenses; //doing sum for mortgage instead of monthly to better represent what it will cost
   yearlyContributions = 26000;
   monthlyContributions = this.yearlyContributions / 12;
-  dailyContributions = this.yearlyContributions / 365;
+  dailyContributions = this.yearlyContributions / 365;  
+  monthlyMortgagePayments = 2555.05;
+  yearlyMortgagePayments = this.monthlyMortgagePayments * 12;
   totalInvestmentsNeeded = 0;
   dateToReachGoal = new Date('2028-01-15T18:30:00Z');
   costPerKid = 250000;
@@ -89,6 +98,7 @@ export class MainView {
 
     var withdrawalRate = .04;
     var interestRate = .07; //inflation adjusted
+    var contributionInflationRate = .03;
     const monthlyRate = interestRate / 12;
     const dailyRate = interestRate / 365;
     var balance = this.currentInvestments;
@@ -133,9 +143,15 @@ export class MainView {
     if (this.doubleContributions)
       dailyContributions *= 2;
 
+    var dailyMortgagePayments = this.removeMortgageEntirely ? 0 : this.yearlyMortgagePayments / 365;    
+
     while (balance < this.totalInvestmentsNeeded) {
       balance *= (1 + dailyRate);
+
+      dailyContributions += (dailyContributions * (contributionInflationRate / 365))
+
       balance += dailyContributions;
+      balance += dailyMortgagePayments;
       days++;
     }
 

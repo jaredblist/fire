@@ -4,6 +4,8 @@
         <br/>
         2026 Yearly Investment Contributions: {{yearlyContributions | currency}}
         <br />
+        2026 Yearly Mortgage Payments: {{yearlyMortgagePayments | currency}}
+        <br />
         2026 Yearly Expenses: {{currentExpenses | currency}}
     </div>
     <div class="options">
@@ -28,7 +30,7 @@
     <div class="option">
         <label>
             <input type="checkbox" [(ngModel)]="removeMortgageEntirely" (change)="calculateTotalInvestmentsNeeded()">
-            Immediately Payoff Mortgage
+            Immediately Payoff Mortgage (Doesn't make much different because nothing changes if our saving pattern doesn't change after paid off)
         </label>
         </div>
         <div class="option">
